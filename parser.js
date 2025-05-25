@@ -1,30 +1,7 @@
-function parseTasks1(taskElements) {
-    const lines = [];
-    for (let taskElement of taskElements) {
-        lines.push(...parseSingleTask1(taskElement));
-    }
-    const gptPrompt = 'Choose a, b or c to fill the gaps. Write the answers each on new line in the format: ' +
-        'n) letter. answer, where n is the question number, letter is a, b or c and answer is the associated ' +
-        'with the letter answer that fits the gap best. NOTHING ELSE should be in the answer!';
-    return [gptPrompt, ...lines, ''];
-}
-
 function parseSingleTask1(taskElement) {
     const extracted = extractQuestionAndAnswers(taskElement);
     const number = extractNumber(taskElement);
     return [`Task ${number}.`, extracted.question, extracted.answers];
-}
-
-function parseTasks2(taskElements) {
-    const lines = [];
-    const gptPrompt = 'Choose the best word to fill the gap. Write the answers each on new line in the ' +
-        'format: n. chosen_word, where n is the number of the blank and chosen_word is your choice. ' +
-        'NOTHING ELSE should be in the answer!';
-    for (let taskElement of taskElements) {
-        const number = extractNumber(taskElement);
-        lines.push(gptPrompt, '', extractTextAndOptions(taskElement), '', '');
-    }
-    return [...lines, ''];
 }
 
 function parseSingleTask2(taskElement) {
@@ -136,25 +113,35 @@ function extractTasks(content) {
 }
 
 function parseAll(content) {
-    const tasks = extractTasks(content);
-    const lines = []
-    // if (tasks.tasks1.length) {
-    //     lines.push(...parseTasks1(tasks.tasks1))
-    // }
-    // lines.push('', '')
-    // if (tasks.tasks2.length) {
-    //     lines.push(...parseTasks2(tasks.tasks2))
-    // }
+    try
+    {
+        const tasks = extractTasks(content);
+        const lines = []
 
-    for (let task of tasks) {
-        if (task.type === 1) {
+
+        if (tasks[0].type === 1) {
             console.log('task 1')
-            lines.push(...parseSingleTask1(task.element), '');
-        } else if (task.type === 2) {
+            lines.push('Choose a, b or c to fill the gaps. Write the answers each on new line in the format: ' +
+            'n) letter. answer, where n is the question number, letter is a, b or c and answer is the associated ' +
+            'with the letter answer that fits the gap best. NOTHING ELSE should be in the answer!', '');
+        } else if (tasks[0].type === 2) {
             console.log('task 2')
-            lines.push(...parseSingleTask2(task.element), '');
+            lines.push('Choose the best word to fill the gap. Write the answers each on new line in the ' +
+            'format: n. chosen_word, where n is the number of the blank and chosen_word is your choice. ' +
+            'NOTHING ELSE should be in the answer!', '');
         }
-    }
 
-    return lines.join('\n');
+        for (let task of tasks) {
+            if (task.type === 1) {
+                lines.push(...parseSingleTask1(task.element), '');
+            } else if (task.type === 2) {
+                lines.push(...parseSingleTask2(task.element), '');
+            }
+        }
+
+        return lines.join('\n');
+    } catch(error)
+    {
+        return 'Ошибка при парсинге!';
+    }
 }
