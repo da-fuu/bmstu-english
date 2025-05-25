@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+  "name": "BMSTU English parser",
+  "version": "1.0.0",
+  "description": "Парсит содержимое активной вкладки и копирует результат в буфер обмена.",
+  "permissions": [
+    "activeTab",
+    "clipboardWrite",
+    "notifications"
+  ],
+  "background": {
+    "scripts": ["parser.js", "background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "BMSTU English parser"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bmstu-english@da-fuu.github.io",
+      "strict_min_version": "57.0"
+    }
+  }
+}
