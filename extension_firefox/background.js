@@ -86,7 +86,7 @@ browser.browserAction.onClicked.addListener(async (tab) => {
               type: 'basic',
               iconUrl: 'icons/icon48.png',
               title: 'Парсинг',
-              message: 'Ошибка парсинга содержимого страницы. Вы уверены что находитесь на странице с заданиями в e-learning?'
+              message: 'Ошибка парсинга содержимого страницы. Вы уверены, что находитесь на странице с заданиями в e-learning?'
           });
           return;
       }
